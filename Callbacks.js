@@ -2,9 +2,9 @@ function flipCoin() {
   return new Promise((resolve, reject) => {
       let result = Math.random();
       if (result > 0.5) {
-          resolve("You win! Fetching advice...");
+          resolve("You win! Fetching advice");
       } else {
-          reject("You lose! Fetching a joke...");
+          reject("You lose! Fetching a joke");
       }
   });
 }

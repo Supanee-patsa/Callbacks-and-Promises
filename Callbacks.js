@@ -1,35 +1,34 @@
-function flipCoin() {
-  return new Promise((resolve, reject) => {
-      let result = Math.random();
-      if (result > 0.5) {
-          resolve("You win! Fetching advice");
-      } else {
-          reject("You lose! Fetching a joke");
-      }
-  });
-}
+// Function to flip a coin and decide the next action
+const flipCoin = async () => {
+  try {
+    console.log("Flipping the coin...");
+    await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate delay
 
-function getAdvice() {
-  return fetch("https://api.adviceslip.com/advice")
-      .then(response => response.json())
-      .then(data => console.log("Advice:", data.slip.advice))
-      .catch(error => console.error("Error fetching advice:", error));
-}
+    let result = Math.random();
 
-function getJoke() {
-  return fetch("https://official-joke-api.appspot.com/random_joke")
-      .then(response => response.json())
-      .then(data => console.log(`Joke: ${data.setup} - ${data.punchline}`))
-      .catch(error => console.error("Error fetching joke:", error));
-}
+    if (result > 0.5) {
+      console.log("You win! Fetching advice...");
+      await getAdvice(); // Fetch advice if you win
+    } else {
+      console.log("You lose! Better luck next time.");
+    }
+  } catch (error) {
+    console.error("Error:", error.message);
+  }
+};
 
+// Function to fetch advice from an API
+const getAdvice = async () => {
+  try {
+    const response = await fetch("https://api.adviceslip.com/advice");
+    if (!response.ok) throw new Error("Failed to fetch advice");
 
-flipCoin()
-  .then(message => {
-      console.log(message);
-      return getAdvice();
-  })
-  .catch(error => {
-      console.log(error);
-      return getJoke();
-  });
+    const data = await response.json();
+    console.log("Advice:", data.slip.advice);
+  } catch (error) {
+    console.error("Error fetching advice:", error.message);
+  }
+};
+
+// Run the program
+flipCoin();
